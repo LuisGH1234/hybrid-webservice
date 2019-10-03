@@ -10,10 +10,12 @@ const apiRootRoute = (req, res) => {
         case "GET":
             if (req.headers["accept"] == "application/xml") {
                 res.writeHead(200, { "Content-type": "application/xml" });
-                res.write(
-                    `<?xml version="1.0" encoding="UTF-8"?>
-                <name>Luis</name>`
-                );
+                const xml = `
+                <?xml version="1.0" encoding="UTF-8">
+                <user>
+                    <name>Luis</name>
+                </user>`;
+                res.write(xml);
             } else {
                 res.writeHead(200, { "Content-type": "application/json" });
                 res.write(JSON.stringify({ name: "Luis" }));
