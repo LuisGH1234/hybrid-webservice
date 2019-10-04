@@ -2,7 +2,16 @@ const http = require("http");
 
 const notFound = (req, res) => {
     res.statusCode = 404;
-    return res.end("404: Not Found");
+    if (req.headers["accept"] == "application/xml") {
+        const xml = `<?xml version="1.0" encoding="UTF-8">
+        <response><status>404</status><message>Not Found</message></response>`;
+        res.writeHead(404, { "Content-type": "application/xml" });
+        res.write(xml);
+    } else {
+        res.writeHead(404, { "Content-type": "application/json" });
+        res.write(JSON.stringify({ status: 404, message: 'Not Found' }));
+    }
+    return res.end();
 };
 
 const apiRootRoute = (req, res) => {
@@ -13,12 +22,12 @@ const apiRootRoute = (req, res) => {
                 const xml = `
                 <?xml version="1.0" encoding="UTF-8">
                 <user>
-                    <name>Luis</name>
+                    <name>Marcelo Rios</name>
                 </user>`;
                 res.write(xml);
             } else {
                 res.writeHead(200, { "Content-type": "application/json" });
-                res.write(JSON.stringify({ name: "Luis" }));
+                res.write(JSON.stringify({ user: { name: 'Marcelo Rios' } }));
             }
             return res.end();
         default: return notFound(req, res);

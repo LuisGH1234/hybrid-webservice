@@ -8,10 +8,22 @@ app.get('/api', (req, res) => {
         const xml = `
         <?xml version="1.0" encoding="UTF-8">
         <user>
-            <name>Luis</name>
+            <name>Marcelo Rios</name>
         </user>`;
         res.send(xml);
-    } else res.json({ name: 'Luis' });
+    } else res.json({ user: { name: 'Marcelo Rios' } });
+    return res.end();
+});
+
+app.use((req, res) => {
+    if (req.headers['accept'] == "application/xml") {
+        const xml = `<?xml version="1.0" encoding="UTF-8">
+        <response><status>404</status><message>Not Found</message></response>`;
+        res.setHeader('Content-Type', 'application/xml');
+        res.status(404).send(xml);
+    } else {
+        res.status(404).json({ status: 404, message: 'Not Found' });
+    }
     return res.end();
 });
 
